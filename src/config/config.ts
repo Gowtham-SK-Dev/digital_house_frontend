@@ -2,8 +2,8 @@ import Config from 'react-native-config';
 
 export const config = {
   // API
-  apiUrl: Config.REACT_APP_API_URL || 'http://192.168.1.100:5000/api',
-  socketUrl: Config.REACT_APP_SOCKET_URL || 'http://192.168.1.100:5000',
+  apiUrl: Config.REACT_APP_API_URL || 'http://localhost:3000/api',
+  socketUrl: Config.REACT_APP_SOCKET_URL || 'http://localhost:3000',
 
   // Firebase
   firebase: {
