@@ -90,6 +90,62 @@ class ApiService {
   }
 
   /**
+   * Profile endpoints
+   */
+  async getProfile(userId: string): Promise<ApiResponse<any>> {
+    return this.api.get(`/profiles/${userId}`);
+  }
+
+  async getMyProfile(): Promise<ApiResponse<any>> {
+    return this.api.get('/profiles/me');
+  }
+
+  async updateMyProfile(data: any): Promise<ApiResponse<any>> {
+    return this.api.patch('/profiles/me', data);
+  }
+
+  async updatePrivacySettings(privacy: any): Promise<ApiResponse<any>> {
+    return this.api.patch('/profiles/me/privacy', { privacy });
+  }
+
+  async searchProfiles(
+    query: string,
+    filters?: {
+      location?: string;
+      interests?: string[];
+      verified?: boolean;
+    }
+  ): Promise<ApiResponse<any>> {
+    return this.api.get('/profiles/search/profiles', {
+      params: {
+        q: query,
+        ...filters,
+      },
+    });
+  }
+
+  async getPendingVerifications(
+    limit: number = 50,
+    offset: number = 0
+  ): Promise<ApiResponse<any>> {
+    return this.api.get('/profiles/admin/pending-verifications', {
+      params: { limit, offset },
+    });
+  }
+
+  async verifyProfile(
+    userId: string,
+    verified: boolean,
+    verificationNotes?: string
+  ): Promise<ApiResponse<any>> {
+    return this.api.post('/profiles/admin/verify', {
+      userId,
+      verified,
+      verificationNotes,
+    });
+  }
+
+  /**
    * User endpoints
    */
   async getUserProfile(userId: string): Promise<ApiResponse<any>> {
@@ -177,6 +233,32 @@ class ApiService {
     content: string
   ): Promise<ApiResponse<any>> {
     return this.api.post(`/posts/${postId}/comments`, { content });
+  }
+
+  async likeComment(commentId: string): Promise<ApiResponse<any>> {
+    return this.api.post(`/posts/comments/${commentId}/like`);
+  }
+
+  async sharePost(postId: string, caption?: string): Promise<ApiResponse<any>> {
+    return this.api.post(`/posts/${postId}/share`, { caption });
+  }
+
+  async getLocationCircles(): Promise<ApiResponse<any>> {
+    return this.api.get('/posts/location-circles');
+  }
+
+  async getFeedWithFilters(
+    page: number = 1,
+    limit: number = 20,
+    filters?: {
+      category?: string;
+      location?: string;
+      search?: string;
+    }
+  ): Promise<PaginatedResponse<any>> {
+    return this.api.get('/posts/feed', {
+      params: { page, limit, ...filters },
+    });
   }
 
   /**
